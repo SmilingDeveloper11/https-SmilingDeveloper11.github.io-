@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del Sistema</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        #info {
+            position: absolute;
+            color: white;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            transform: rotate(360deg); /* Rotación 360 grados */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Video de fondo -->
+    <video id="background-video" autoplay loop muted>
+        <source src="video.mp4" type="video/mp4">
+        Tu navegador no soporta el video.
+    </video>
+
+    <!-- Música de fondo -->
+    <audio id="background-audio" autoplay loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+    </audio>
+
+    <!-- Texto de información del sistema -->
+    <div id="info">
+        <h1>Información del Sistema</h1>
+        <p id="system-info">Cargando información...</p>
+    </div>
+
+    <script>
+        // Aquí puedes añadir la lógica para manejar la información
+        document.getElementById('system-info').innerHTML = `
+            IP Address: 192.168.1.1<br>
+            Country: Exampleland<br>
+            City: Example City<br>
+            Platform: Web<br>
+            Screen Width: ${window.innerWidth}<br>
+            Screen Height: ${window.innerHeight}
+        `;
+    </script>
+
+</body>
+</html>
