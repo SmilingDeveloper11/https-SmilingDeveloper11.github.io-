@@ -31,7 +31,7 @@
             min-width: 100%;
             min-height: 100%;
             z-index: -1;
-            transform: rotate(360deg); /* Rotación 360 grados */
+            transform: rotate(360deg);
         }
     </style>
 </head>
@@ -56,15 +56,83 @@
     </div>
 
     <script>
-        // Aquí puedes añadir la lógica para manejar la información
-        document.getElementById('system-info').innerHTML = `
-            IP Address: 192.168.1.1<br>
-            Country: Exampleland<br>
-            City: Example City<br>
-            Platform: Web<br>
-            Screen Width: ${window.innerWidth}<br>
-            Screen Height: ${window.innerHeight}
-        `;
+        // Función para obtener información de la IP y ubicación
+        async function getIpInfo() {
+            const response = await fetch('https://ipapi.co/json/');
+            const data = await response.json();
+            return data;
+        }
+
+        // Función para obtener información del navegador y sistema
+        function getBrowserInfo() {
+            return {
+                browserName: navigator.userAgent,
+                platformName: navigator.platform,
+                browserVersion: navigator.appVersion,
+                mobileTablet: /Mobi|Android/i.test(navigator.userAgent) ? 'Yes' : 'No',
+                referrer: document.referrer || 'Unknown',
+                systemLanguages: navigator.languages.join(', '),
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight,
+                displayPixelDepth: window.screen.pixelDepth,
+                screenOrientation: window.screen.orientation.type,
+                cpuThreads: navigator.hardwareConcurrency || 'N/A',
+                availableMemory: (navigator.deviceMemory || 'N/A') + ' GB',
+                gpuVendor: 'Unknown', // Obtenido con WebGL
+                gpuInfo: 'Unknown'   // Obtenido con WebGL
+            };
+        }
+
+        // Función para mostrar la información
+        async function displaySystemInfo() {
+            const ipInfo = await getIpInfo();
+            const browserInfo = getBrowserInfo();
+            const currentTime = new Date().toLocaleString();
+
+            // Actualizar la información en la página
+            document.getElementById('system-info').innerHTML = `
+                <strong>IP Address:</strong> ${ipInfo.ip} <br>
+                <strong>Country:</strong> ${ipInfo.country_name} <br>
+                <strong>Region:</strong> ${ipInfo.region} <br>
+                <strong>City:</strong> ${ipInfo.city} <br>
+                <strong>ZIP Code:</strong> ${ipInfo.postal} <br>
+                <strong>Full Location:</strong> ${ipInfo.city}, ${ipInfo.region}, ${ipInfo.country_name} <br>
+                <strong>Latitude:</strong> ${ipInfo.latitude} <br>
+                <strong>Longitude:</strong> ${ipInfo.longitude} <br>
+                <strong>Timezone:</strong> ${ipInfo.timezone} <br>
+                <strong>Current Time:</strong> ${currentTime} <br>
+                <strong>ISP:</strong> ${ipInfo.org} <br>
+                <strong>Organization:</strong> ${ipInfo.org} <br>
+                <strong>Autonomous System:</strong> ${ipInfo.asn} <br>
+                <strong>Browser Name:</strong> ${browserInfo.browserName} <br>
+                <strong>Platform Name:</strong> ${browserInfo.platformName} <br>
+                <strong>Browser Version:</strong> ${browserInfo.browserVersion} <br>
+                <strong>Mobile/Tablet:</strong> ${browserInfo.mobileTablet} <br>
+                <strong>Refferer:</strong> ${browserInfo.referrer} <br>
+                <strong>System Languages:</strong> ${browserInfo.systemLanguages} <br>
+                <strong>Screen Width:</strong> ${browserInfo.screenWidth} <br>
+                <strong>Screen Height:</strong> ${browserInfo.screenHeight} <br>
+                <strong>Window Width:</strong> ${browserInfo.windowWidth} <br>
+                <strong>Window Height:</strong> ${browserInfo.windowHeight} <br>
+                <strong>Display Pixel Depth:</strong> ${browserInfo.displayPixelDepth} <br>
+                <strong>Screen Orientation:</strong> ${browserInfo.screenOrientation} <br>
+                <strong>CPU Threads:</strong> ${browserInfo.cpuThreads} <br>
+                <strong>Available Browser Memory:</strong> ${browserInfo.availableMemory} <br>
+                <strong>GPU Vendor:</strong> ${browserInfo.gpuVendor} <br>
+                <strong>GPU Info:</strong> ${browserInfo.gpuInfo}
+            `;
+        }
+
+        // Llamar a la función para mostrar la información
+        displaySystemInfo();
+
+        // Actualizar la hora cada segundo
+        setInterval(() => {
+            const currentTime = new Date().toLocaleString();
+            document.getElementById('system-info').innerHTML = document.getElementById('system-info').innerHTML.replace(/<strong>Current Time:<\/strong> .*? <br>/, `<strong>Current Time:</strong> ${currentTime} <br>`);
+        }, 1000);
     </script>
 
 </body>
